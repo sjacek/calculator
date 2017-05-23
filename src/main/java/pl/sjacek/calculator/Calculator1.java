@@ -12,8 +12,9 @@ public class Calculator1 {
     // Associativity constants for operators
     private static final int LEFT_ASSOC = 0;
     private static final int RIGHT_ASSOC = 1;
+
     // Operators
-    private static final Map<String, int[]> OPERATORS = new HashMap<String, int[]>();
+    private static final Map<String, int[]> OPERATORS = new HashMap<>();
 
     static {
         // Map<"token", []{precendence, associativity}>
@@ -47,8 +48,8 @@ public class Calculator1 {
 
     // Convert infix expression format into reverse Polish notation
     public static String[] expToRPN(String[] inputTokens) {
-        ArrayList<String> out = new ArrayList<String>();
-        Stack<String> stack = new Stack<String>();
+        ArrayList<String> out = new ArrayList<>();
+        Stack<String> stack = new Stack<>();
         // For each token
         for (String token : inputTokens) {
             // If token is an operator
@@ -95,7 +96,7 @@ public class Calculator1 {
     }
 
     public static double RPNtoDouble(String[] tokens) {
-        Stack<String> stack = new Stack<String>();
+        Stack<String> stack = new Stack<>();
         // For each token
         for (String token : tokens) //for each
         {

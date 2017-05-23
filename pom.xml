@@ -18,6 +18,7 @@
         <start-class>pl.sjacek.calculator.Application</start-class>
         <java.version>1.8</java.version>
 
+        <org.springframework-version>4.3.8.RELEASE</org.springframework-version>
         <com.fasterxml.jackson-version>2.8.6</com.fasterxml.jackson-version>
     </properties>
 
@@ -34,29 +35,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>mysql</groupId>-->
-        <!--<artifactId>mysql-connector-java</artifactId>-->
-        <!--</dependency>-->
-        <!-- Spring JDBC -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>4.3.8.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.datatype</groupId>-->
-            <!--<artifactId>jackson-datatype-jsr310</artifactId>-->
-            <!--<version>${com.fasterxml.jackson-version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${com.fasterxml.jackson-version}</version>
         </dependency>
         <dependency>
-            <!-- Note: core-annotations version x.y.0 is generally compatible with
-                 (identical to) version x.y.1, x.y.2, etc. -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${com.fasterxml.jackson-version}</version>
@@ -67,7 +61,6 @@
             <version>${com.fasterxml.jackson-version}</version>
         </dependency>
 
-        <!-- H2 DB -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

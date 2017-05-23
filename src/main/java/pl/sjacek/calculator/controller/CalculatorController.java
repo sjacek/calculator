@@ -1,13 +1,10 @@
 package pl.sjacek.calculator.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.sjacek.calculator.Calculator;
+import pl.sjacek.calculator.CalculatorScriptEngine;
 import pl.sjacek.calculator.model.Calculation;
 import pl.sjacek.calculator.repositories.CalculationRepository;
 
@@ -38,6 +35,6 @@ public class CalculatorController {
         List<Calculation> calculations = calculationRepository.findAll();
         calculations.forEach(calculation1 -> logger.info(calculation1.getExpression()) );
 
-        return Calculator.calculate(param.getExpression());
+        return CalculatorScriptEngine.calculate(param.getExpression());
     }
 }

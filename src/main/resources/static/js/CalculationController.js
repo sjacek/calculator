@@ -29,6 +29,10 @@ angular
             $scope.result="";
         });
     }
+
+    $scope.calculate = function calculate() {
+
+    }
     //
     // findAllTasks();
     //

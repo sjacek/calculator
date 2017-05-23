@@ -1,0 +1,73 @@
+## See http://docs.spring.io/spring-boot/docs/1.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-profile-specific-properties
+## for more details about creating profile-specific property files
+#
+## See http://docs.spring.io/spring-boot/docs/1.1.4.RELEASE/reference/htmlsingle/#howto-initialize-a-database-using-jpa
+## for more details and options on initializing a production database
+##spring.jpa.generate-ddl=true
+###spring.jpa.hibernate.ddl-auto=validate
+##
+### Replace with your connection string
+###spring.datasource.url=jdbc:mysql://192.168.99.100:3306/taskmanager
+##spring.datasource.url=jdbc:h2:mem:testdb
+##
+### Replace with your credentials
+##spring.datasource.username=sa
+##spring.datasource.password=
+##
+##spring.datasource.driverClassName=org.h2.Driver
+##
+#
+#server.port = 8095
+#
+##spring.datasource.url = jdbc:h2:mem:app_db;DB_CLOSE_ON_EXIT=FALSE
+#spring.datasource.url = jdbc:h2:file:~/h2/app_db;DB_CLOSE_ON_EXIT=FALSE
+#spring.datasource.username = sa
+#spring.datasource.password =
+#spring.datasource.driverClassName = org.h2.Driver
+#spring.jpa.hibernate.ddl-auto = update
+
+---
+server:
+  port: 8095
+#  contextPath: /calculator
+---
+spring:
+  profiles: local, default
+
+  h2:
+    console:
+      enabled: false # Enable the console.
+      path: /h2-console # Path at which the console will be available.
+      settings:
+        trace: false # Enable trace output.
+        web-allow-others: false # Enable remote access.
+
+  datasource:
+    url: jdbc:h2:~/h2/calculator
+    username: SA
+    password:
+    driverClassName: org.h2.Driver
+#    defaultSchema:
+#    maxPoolSize: 10
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+#      dialect: org.hibernate.dialect.H2Dialect
+---
+spring:
+  profiles: prod
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/calculator
+    username: myuser
+    password: mypassword
+    driverClassName: com.mysql.jdbc.Driver
+#    defaultSchema:
+#    maxPoolSize: 20
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+#      dialect: org.hibernate.dialect.MySQLDialect
+

@@ -1,9 +1,6 @@
 package pl.sjacek.calculator.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,11 +10,14 @@ import javax.persistence.Id;
 /**
  * Created by jacek on 21.05.17.
  */
-@EqualsAndHashCode(exclude = { "id" })
-@ToString
+@Entity
+@Builder
 @Getter
 @Setter
-@Entity
+@EqualsAndHashCode(exclude = { "id" })
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Calculation {
 
     @Id

@@ -2,7 +2,7 @@
  * Created by jacek.sztajnke on 2017-05-22.
  */
 
-angular.module('calculatorApp', ['ngAnimate']).controller('taskManagerController', function ($scope,$http) {
+app.controller('taskManagerController', function ($scope,$http) {
 
     var urlBase="";
     $scope.toggle=true;
@@ -101,7 +101,7 @@ angular.module('calculatorApp', ['ngAnimate']).controller('taskManagerController
 });
 
 //Angularjs Directive for confirm dialog box
-taskManagerModule.directive('ngConfirmClick', [
+app.directive('ngConfirmClick', [
     function(){
         return {
             link: function (scope, element, attr) {

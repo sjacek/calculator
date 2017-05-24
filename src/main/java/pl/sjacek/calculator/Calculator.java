@@ -208,12 +208,7 @@ public class Calculator {
     }
 
     private String prepareExpression() {
-
-        expression = expression.replace("PI", Double.toString(Math.PI));
-        expression = expression.replace("E", Double.toString(Math.E));
-        expression = expression.replace(" ", "");
-
-        return expression;
+        return expression.replace(" ", "");
     }
 
 }

@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                     http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="jacek (generated)" id="1495659938899-1">
+        <createTable tableName="CALCULATION">
+            <column autoIncrement="true" name="ID" type="BIGINT(19)">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_4"/>
+            </column>
+            <column name="EXPRESSION" type="VARCHAR(255)"/>
+            <column name="DATETIME" type="DATETIME"/>
+        </createTable>
+        <addNotNullConstraint tableName="CALCULATION" columnName="EXPRESSION" columnDataType="VARCHAR(255)"/>
+        <addNotNullConstraint tableName="CALCULATION" columnName="DATETIME" columnDataType="DATETIME"/>
+    </changeSet>
+    <changeSet author="jacek (generated)" id="1495659938899-2">
+        <createTable tableName="TASK">
+            <column autoIncrement="true" name="TASK_ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_2"/>
+            </column>
+            <column name="TASK_ARCHIVED" type="INT(10)"/>
+            <column name="TASK_DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="TASK_NAME" type="VARCHAR(255)"/>
+            <column name="TASK_PRIORITY" type="VARCHAR(255)"/>
+            <column name="TASK_STATUS" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -8,6 +8,10 @@ server:
     basedir: ../tomcat
     rotate: true
 
+liquibase:
+  change-log:
+    classpath:liquibase-changelog.xml
+
 ---
 spring:
   profiles: local, default
@@ -30,7 +34,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 #      dialect: org.hibernate.dialect.H2Dialect
 logging:
   level:

@@ -34,12 +34,13 @@
                     </tr>
                 </table>
             </div>
-            <!--<div class="task" ng-repeat="task in tasks">-->
+            <div class="calculation" ng-repeat="calculation in calculations">
 				<!--<span ng-if="task.taskPriority=='HIGH'" class="priority priority-red">-->
-					<!--{{task.taskPriority}}-->
+					{{calculation.id}}
 				<!--</span>-->
+                {{calculation.datetime}}
                 <!--<span ng-if="task.taskPriority=='MEDIUM'" class="priority priority-yellow">-->
-					<!--{{task.taskPriority}}-->
+					{{calculation.expression}}
 				<!--</span>-->
                 <!--<span ng-if="task.taskPriority=='LOW'" class="priority priority-green">-->
 					<!--{{task.taskPriority}}-->
@@ -60,7 +61,7 @@
                         <!--<span class="action-status">{{task.taskStatus}}</span>-->
                     <!--</a>-->
                 <!--</div>-->
-            <!--</div>-->
+            </div>
         </div>
     </div>
     <!--<div id="add-task-panel" class="fadein fadeout addpanel panel" ng-hide="toggle">-->

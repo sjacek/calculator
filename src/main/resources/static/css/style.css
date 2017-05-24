@@ -106,13 +106,18 @@ body
 	content: " ";
 	display: table;
 }
-.panel .pabel-body .task
+.panel .pabel-body .task .calculation
 {
 	padding-left: 20px;
 	padding-right: 20px;
 	margin: 0 -20px;
 }
 .task:before
+{
+	content: " ";
+	display: table;
+}
+.calculation:before
 {
 	content: " ";
 	display: table;

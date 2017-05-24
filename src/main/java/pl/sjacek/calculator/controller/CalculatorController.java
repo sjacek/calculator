@@ -3,14 +3,15 @@ package pl.sjacek.calculator.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import pl.sjacek.calculator.Calculator;
+import pl.sjacek.calculator.CalculatorException;
 import pl.sjacek.calculator.model.Calculation;
 import pl.sjacek.calculator.repositories.CalculationRepository;
 
 import java.lang.invoke.MethodHandles;
-import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -27,30 +28,40 @@ public class CalculatorController {
     @Autowired
     private CalculationRepository calculationRepository;
 
-
-
-    @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody ModelAndView calculate(@RequestBody CalculateParam param) {
+    @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+    public ModelMap calculate(@RequestBody CalculateParam param) throws CalculatorException {
         logger.debug("calculate({})", param.getExpression());
 
         calculationRepository.save(Calculation.builder()
                 .expression(param.getExpression())
+                .datetime(new Date())
                 .build());
 
         List<Calculation> calculations = calculationRepository.findAll();
         calculations.forEach(calculation1 -> logger.info(calculation1.getExpression()) );
 
-        // https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
-        // http://www.baeldung.com/exception-handling-for-rest-with-spring
-        ModelAndView response = new ModelAndView();
-        try {
-            response.addObject("result", Calculator.calculate(param.getExpression()));
-        }
-        catch (ParseException ex) {
+        ModelMap model = new ModelMap("calculator.html");
+        model.addAttribute(Double.toString(Calculator.calculate(param.getExpression())));
+        return model;
+    }
 
-            response.setParseException(ex);
-        }
+    @ExceptionHandler(CalculatorException.class)
+    public ModelMap handleCustomException(CalculatorException ex) {
+        logger.warn(ex.getMessage(), ex);
+        ModelMap model = new ModelMap("calculator.html");
+        model.addAttribute(ex.getMessage());
+        return model;
+    }
 
-        return response;
+    @ExceptionHandler(Exception.class)
+    public ModelMap handleAllException(Exception ex) {
+        logger.warn(ex.getMessage(), ex);
+        ModelMap model = new ModelMap("calculator.html");
+        StringBuilder message = new StringBuilder();
+        message.append(ex.getClass().getName()).append(": ");
+        if (ex.getMessage() != null)
+            message.append(ex.getMessage());
+        model.addAttribute(message.toString());
+        return model;
     }
 }

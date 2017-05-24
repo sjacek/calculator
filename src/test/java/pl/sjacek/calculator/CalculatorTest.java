@@ -22,7 +22,7 @@ public class CalculatorTest {
 
     @Test
     public void evaluateZeroOperators() throws ParseException {
-        assertEquals(2.0d, calculate("1"), 0.0d);
+        assertEquals(1.0d, calculate("1"), 0.0d);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class CalculatorTest {
 
     @Test
     public void evaluateThreeOperatorWithInnerParens() throws ParseException {
-        assertEquals(1.0d, calculate("(1-1)+(1+1)"), 0.0d);
+        assertEquals(2.0d, calculate("(1-1)+(1+1)"), 0.0d);
     }
 
     @Test

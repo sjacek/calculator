@@ -18,8 +18,22 @@ public class Calculator {
     private static final List<Character> DIVIDERS = ImmutableList.of('*', '/', '-', '+');
 
 //    private static final ArrayList<Character> DIVIDERS = new ArrayList<>(Arrays.asList('*', '/', '-', '+'));
-    private static final int RIGHT_DIRECTION = 1;
-    private static final int LEFT_DIRECTION = -1;
+//    private static final int RIGHT_DIRECTION = 1;
+//    private static final int LEFT_DIRECTION = -1;
+
+    private enum Direction {
+        Right(1), Left(-1);
+
+        private int shift;
+
+        Direction(int shift) {
+            this.shift = shift;
+        }
+
+        public int getShift() {
+            return shift;
+        }
+    }
 
     private String expression;
 
@@ -29,7 +43,7 @@ public class Calculator {
 
     public double calculate() throws ParseException {
         expression = prepareExpression();
-        logger.info("Prepared expression: " + expression);
+        logger.debug("Prepared expression: " + expression);
         return Double.parseDouble(recursiveCalculate(expression));
     }
 
@@ -41,13 +55,18 @@ public class Calculator {
     //states "(", "sin", "cos", "exp", "*", "/", "+", "-"
     private String recursiveCalculate(String expression) throws ParseException {
         int pos;
-        logger.info("Solving expression: " + expression);
+        logger.debug("Solving expression: " + expression);
         //Extracting expression from braces, doing recursive call
         //replace braced expression on result of it solving
         if (-1 != (pos = expression.indexOf("("))) {
 
-            String subexp = extractExpressionFromBraces(pos);
+            String subexp = extractExpressionFromBraces(expression, pos);
             expression = expression.replace("(" + subexp + ")", recursiveCalculate(subexp));
+
+            int open = expression.indexOf("(");
+            int close = expression.indexOf(")");
+            if (open == -1 && close != -1)
+                throw new ParseException("Closing bracket without opening bracket", close);
 
             return recursiveCalculate(expression);
 
@@ -57,7 +76,7 @@ public class Calculator {
 
             pos += 2;//shift index to last symbol of "sin" instead of first
 
-            String number = extractNumber(pos, RIGHT_DIRECTION);
+            String number = extractNumber(expression, pos, Direction.Right);
 
             expression = expression.replace("sin" + number, Double.toString(Math.sin(Double.parseDouble(number))));
 
@@ -67,7 +86,7 @@ public class Calculator {
 
             pos += 2;
 
-            String number = extractNumber(pos, RIGHT_DIRECTION);
+            String number = extractNumber(expression, pos, Direction.Right);
 
             expression = expression.replace("cos" + number, Double.toString(Math.cos(Double.parseDouble(number))));
 
@@ -77,7 +96,7 @@ public class Calculator {
 
             pos += 2;
 
-            String number = extractNumber(pos, RIGHT_DIRECTION);
+            String number = extractNumber(expression, pos, Direction.Right);
 
             expression = expression.replace("exp" + number, Double.toString(Math.exp(Double.parseDouble(number))));
 
@@ -95,8 +114,8 @@ public class Calculator {
 
             char divider = expression.charAt(pos);
 
-            String leftNum = extractNumber(pos, LEFT_DIRECTION);
-            String rightNum = extractNumber(pos, RIGHT_DIRECTION);
+            String leftNum = extractNumber(expression, pos, Direction.Left);
+            String rightNum = extractNumber(expression, pos, Direction.Right);
 
             expression = expression.replace(leftNum + divider + rightNum, calcShortExpr(leftNum, rightNum, divider));
 
@@ -114,8 +133,8 @@ public class Calculator {
 
             char divider = expression.charAt(pos);
 
-            String leftNum = extractNumber(pos, LEFT_DIRECTION);
-            String rightNum = extractNumber(pos, RIGHT_DIRECTION);
+            String leftNum = extractNumber(expression, pos, Direction.Left);
+            String rightNum = extractNumber(expression, pos, Direction.Right);
 
             expression = expression.replace(leftNum + divider + rightNum, calcShortExpr(leftNum, rightNum, divider));
 
@@ -124,7 +143,7 @@ public class Calculator {
         } else return expression;
     }
 
-    private String extractExpressionFromBraces(int pos) throws ParseException {
+    private String extractExpressionFromBraces(String expression, int pos) throws ParseException {
         int braceDepth = 1;
         StringBuilder subexp = new StringBuilder();
 
@@ -146,28 +165,26 @@ public class Calculator {
             if (braceDepth == 0 && !subexp.toString().equals(""))
                 return subexp.toString();
         }
-        throw new ParseException("Failure", i);
+        throw new ParseException("Opening bracket without closing bracket", i);
     }
 
-    private String extractNumber(int pos, int direction) {
+    private String extractNumber(String expression, int pos, Direction direction) {
 
         StringBuilder resultNumber = new StringBuilder();
-        int currPos = pos + direction; //shift pos on next symbol from divider
+        int currPos = pos + direction.getShift();
 
         //For negative numbers
         if (expression.charAt(currPos) == '-') {
             resultNumber.append(expression.charAt(currPos));
-            currPos += direction;
+            currPos += direction.getShift();
         }
 
-        for (; currPos >= 0 &&
-                currPos < expression.length() &&
-                !DIVIDERS.contains(expression.charAt(currPos));
-             currPos += direction) {
+        for (; currPos >= 0 && currPos < expression.length() && !DIVIDERS.contains(expression.charAt(currPos));
+             currPos += direction.getShift()) {
             resultNumber.append(expression.charAt(currPos));
         }
 
-        if (direction == LEFT_DIRECTION)
+        if (direction == Direction.Left)
             resultNumber = resultNumber.reverse();
 
         return resultNumber.toString();

@@ -4,12 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.sjacek.calculator.CalculatorScriptEngine;
+import org.springframework.web.servlet.ModelAndView;
+import pl.sjacek.calculator.Calculator;
 import pl.sjacek.calculator.model.Calculation;
 import pl.sjacek.calculator.repositories.CalculationRepository;
 
 import java.lang.invoke.MethodHandles;
+import java.text.ParseException;
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * Created by jacek.sztajnke on 2017-05-23.
@@ -23,10 +27,11 @@ public class CalculatorController {
     @Autowired
     private CalculationRepository calculationRepository;
 
-    @PostMapping(path = "/calculate")
-    public @ResponseBody Double calculate(@RequestBody CalculateParam param) {
+
+
+    @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody ModelAndView calculate(@RequestBody CalculateParam param) {
         logger.debug("calculate({})", param.getExpression());
-        Double result = 2.0;
 
         calculationRepository.save(Calculation.builder()
                 .expression(param.getExpression())
@@ -35,6 +40,17 @@ public class CalculatorController {
         List<Calculation> calculations = calculationRepository.findAll();
         calculations.forEach(calculation1 -> logger.info(calculation1.getExpression()) );
 
-        return CalculatorScriptEngine.calculate(param.getExpression());
+        // https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+        // http://www.baeldung.com/exception-handling-for-rest-with-spring
+        ModelAndView response = new ModelAndView();
+        try {
+            response.addObject("result", Calculator.calculate(param.getExpression()));
+        }
+        catch (ParseException ex) {
+
+            response.setParseException(ex);
+        }
+
+        return response;
     }
 }

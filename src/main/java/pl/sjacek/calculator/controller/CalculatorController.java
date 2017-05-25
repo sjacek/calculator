@@ -37,9 +37,6 @@ public class CalculatorController {
                 .datetime(new Date())
                 .build());
 
-        List<Calculation> calculations = calculationRepository.findAll();
-        calculations.forEach(calculation1 -> logger.info(calculation1.getExpression()) );
-
         ModelMap model = new ModelMap("calculator.html");
         model.addAttribute(Double.toString(Calculator.calculate(param.getExpression())));
         return model;

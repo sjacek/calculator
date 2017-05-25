@@ -40,7 +40,7 @@ public class Calculator {
 
     public double calculate() throws CalculatorException {
         expression = prepareExpression();
-        logger.debug("Prepared expression: " + expression);
+        logger.trace("Prepared expression: " + expression);
         return Double.parseDouble(recursiveCalculate(expression));
     }
 
@@ -52,7 +52,7 @@ public class Calculator {
     //states "(", "sin", "cos", "exp", "*", "/", "+", "-"
     private String recursiveCalculate(String expression) throws CalculatorException {
         int pos;
-        logger.debug("Solving expression: " + expression);
+        logger.trace("Solving expression: " + expression);
         //Extracting expression from braces, doing recursive call
         //replace braced expression on result of it solving
         if (-1 != (pos = expression.indexOf("("))) {

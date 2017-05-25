@@ -6,7 +6,7 @@
                      http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet author="jacek (generated)" id="1495659938899-1">
         <createTable tableName="CALCULATION">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
+            <column autoIncrement="true" name="ID" type="INT(10)">
                 <constraints primaryKey="true" primaryKeyName="CONSTRAINT_4"/>
             </column>
             <column name="EXPRESSION" type="VARCHAR(255)"/>

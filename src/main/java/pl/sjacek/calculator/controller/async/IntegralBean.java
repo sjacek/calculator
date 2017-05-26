@@ -11,15 +11,14 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class IntegralBean {
     @Async
-    public CompletableFuture<Double> runTask () {
+    public CompletableFuture<Double> runTask (double d) {
         log.info("Running task  thread: {}", Thread.currentThread().getName());
 
-        CompletableFuture<Double> result = new CompletableFuture<Double>() {
+        return new CompletableFuture<Double>() {
             @Override
             public Double get() {
-                return 123.45;
+                return d + 10;
             }
         };
-        return result;
     }
 }

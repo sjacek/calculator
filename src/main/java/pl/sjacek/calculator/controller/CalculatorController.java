@@ -14,11 +14,15 @@ import pl.sjacek.calculator.controller.async.IntegralBean;
 import pl.sjacek.calculator.model.Calculation;
 import pl.sjacek.calculator.repositories.CalculationRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -69,19 +73,23 @@ public class CalculatorController {
 //        IntegralBean bean = context.getBean(IntegralBean.class);
         log.debug("calling IntegralBean#runTask() thread: {}", Thread.currentThread().getName());
 
+        List<Double> input = new ArrayList<>();
+        for (int i = 0; i < param.getThreads(); i++) input.add((double)i);
 
-        CompletableFuture<Double> result = integralBean.runTask();
+        List<CompletableFuture<Double>> results = input.stream().map(d -> integralBean.runTask(d)).collect(Collectors.toList());
 
-        log.debug("Task started");
-//        ConcurrentTaskExecutor exec = (ConcurrentTaskExecutor) context.getBean("taskExecutor");
+        log.debug("Tasks started");
         ExecutorService es = (ExecutorService) ((ConcurrentTaskExecutor)executor).getConcurrentExecutor();
         es.shutdown();
 
-        try {
-            log.debug("Result: {}", result.get());
-        } catch (InterruptedException | ExecutionException ex) {
-            log.error(ex.getMessage());
-        }
+        results.forEach(result -> {
+            try {
+                log.debug("Result:{}", result.get());
+            } catch (InterruptedException | ExecutionException ex) {
+                log.error(ex.getMessage());
+            }
+        });
+
         ModelMap model = new ModelMap(CALCULATOR_HTML);
         model.addAttribute("");
         return model;

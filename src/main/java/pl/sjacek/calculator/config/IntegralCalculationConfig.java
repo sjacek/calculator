@@ -2,9 +2,9 @@ package pl.sjacek.calculator.config;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
@@ -24,17 +24,15 @@ public class IntegralCalculationConfig implements AsyncConfigurer {
         return new IntegralBean();
     }
 
+    @Value("${calculator.threads.pool-size:20}")
+    private Integer poolSize;
+
     @Bean
     @Qualifier("taskExecutor")
     @Override
-    public Executor getAsyncExecutor () {
-        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3));
+    public Executor getAsyncExecutor() {
+        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(poolSize));
     }
-
-//    @Bean
-//    public TaskExecutor taskExecutor() {
-//        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3));
-//    }
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler () {

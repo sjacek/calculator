@@ -12,6 +12,10 @@ liquibase:
   change-log:
     classpath:liquibase-changelog.xml
 
+calculator:
+  threads:
+    pool-size: 10
+
 ---
 spring:
   profiles: local, default

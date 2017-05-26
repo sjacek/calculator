@@ -19,7 +19,7 @@ spring:
   h2:
     console:
       enabled: false # Enable the console.
-      path: /h2-console # Path at which the console will be available.
+      path: /h2-console/* # Path at which the console will be available.
       settings:
         trace: false # Enable trace output.
         web-allow-others: false # Enable remote access.
@@ -42,6 +42,7 @@ logging:
     org.apache: INFO
     org.springframework.data: DEBUG
     org.springframework.data.mongodb.core.MongoDbUtils: INFO
+    org.springframework.data.rest.webmvc.json.PersistentEntityJackson2Module: INFO
     pl.sjacek: DEBUG
 
 ---

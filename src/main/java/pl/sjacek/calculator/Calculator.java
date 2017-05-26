@@ -1,19 +1,16 @@
 package pl.sjacek.calculator;
 
 import com.google.common.collect.ImmutableList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-import java.lang.invoke.MethodHandles;
 import java.text.ParseException;
 import java.util.List;
 
 /**
  * Created by Vladimir on 20.02.14.
  */
+@Slf4j
 public class Calculator {
-
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final List<Character> DIVIDERS = ImmutableList.of('*', '/', '-', '+');
 
@@ -40,7 +37,7 @@ public class Calculator {
 
     public double calculate() throws CalculatorException {
         expression = prepareExpression();
-        logger.trace("Prepared expression: " + expression);
+        log.trace("Prepared expression: " + expression);
         return Double.parseDouble(recursiveCalculate(expression));
     }
 
@@ -52,7 +49,7 @@ public class Calculator {
     //states "(", "sin", "cos", "exp", "*", "/", "+", "-"
     private String recursiveCalculate(String expression) throws CalculatorException {
         int pos;
-        logger.trace("Solving expression: " + expression);
+        log.trace("Solving expression: " + expression);
         //Extracting expression from braces, doing recursive call
         //replace braced expression on result of it solving
         if (-1 != (pos = expression.indexOf("("))) {

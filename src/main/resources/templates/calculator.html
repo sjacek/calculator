@@ -17,34 +17,62 @@
     <div id="task-panel" class="fadein fadeout showpanel panel">
         <div class="panel-heading">
             <i class="panel-title-icon fa fa-calculator"></i>
-            <span class="panel-title">Kalkulator</span>
+            <span class="panel-title">Calculator</span>
             <div class="panel-heading-controls">
-                <button ng-click="toggle = !toggle" class="btn-panel">Pokaż wszystkie kalkulacje</button>
+                <button ng-click="show_integral = !show_integral" class="btn-panel">Całka e^x</button>
+                <button ng-click="show_previous = !show_previous" class="btn-panel">Show previous calculations</button>
             </div>
         </div>
         <div class="panel-body">
-            <div>
+            <div ng-hide="show_integral">
                 <table>
                     <tr>
-                        <td>Wyrażenie:</td>
+                        <td>Expression:</td>
                         <td><input type="text" ng-model="expression"/></td>
                     </tr>
                     <tr>
-                        <td>Wynik:</td>
+                        <td>Result:</td>
                         <td>{{ result }}</td>
                     </tr>
                     <tr>
-                        <td><br/><button ng-click="calculate()" class="btn-panel-big">Oblicz</button></td>
+                        <td><br/><button ng-click="calculate()" class="btn-panel-big">Calculate</button></td>
                     </tr>
                 </table>
             </div>
-            <div class="panel-body" ng-hide="toggle">
+            <div class="panel-body" ng-show="show_integral">
+                <table>
+                    <tr>
+                        <td>Interval:</td>
+                        <td><input type="text" ng-model="interval"/></td>
+                    </tr>
+                    <tr>
+                        <td>Number of threads::</td>
+                        <td><input type="text" ng-model="threads"/></td>
+                    </tr>
+                    <tr>
+                        <td>Number of repetitions:</td>
+                        <td><input type="text" ng-model="repetitions"/></td>
+                    </tr>
+                    <tr>
+                        <td>Result:</td>
+                        <td>{{ integralResult }}</td>
+                    </tr>
+                    <tr>
+                        <td><br/><button ng-click="calculateIntegral()" class="btn-panel-big">Calculate</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-body" ng-show="show_previous">
                 <div class="calculation" ng-repeat="calculation in calculations">
-                    <!--<script>-->
-                        <!--var datetime = moment({{calculation.datetime}}, 'YYYY-MM-DD hh:mm');-->
-                    <!--</script>-->
-                    <span class="calculation-row">{{calculation.datetime}}</span>
+                    <!--script>
+                        //<![CDATA[
+                        var datetime = moment({{calculation.datetime}}, 'YYYY-MM-DD hh:mm');
+                        document.getElementsById('demo').innerHTML = datetime;
+                        //]]>
+                    </script-->
+                    <span class="calculation-row"><a ng-href="/calculations/{{hash}}">blabla</a></span>
                     <span class="calculation-row">{{calculation.expression}}</span>
+                    <span class="calculation-row">{{moment(calculation.datetime, 'YYYY-MM-DD hh:mm')}}</span>
                 </div>
             </div>
         </div>

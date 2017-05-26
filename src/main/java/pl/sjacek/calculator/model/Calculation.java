@@ -14,14 +14,11 @@ import java.util.Date;
  * Created by jacek on 21.05.17.
  */
 @Entity
-@Builder
-@Getter
-@Setter
-@EqualsAndHashCode(exclude = { "id" })
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
-public class Calculation {
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = { "id" })
+@Data public class Calculation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

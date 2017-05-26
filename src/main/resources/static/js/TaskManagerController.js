@@ -15,13 +15,13 @@ app.controller('taskManagerController', function ($scope,$http) {
         //get all tasks and display initially
         $http.get(urlBase + '/tasks/search/findByTaskArchived?archivedfalse=0').
         success(function (data) {
-            if (data._embedded != undefined) {
+            if (data._embedded !== undefined) {
                 $scope.tasks = data._embedded.tasks;
             } else {
                 $scope.tasks = [];
             }
             for (var i = 0; i < $scope.tasks.length; i++) {
-                if ($scope.tasks[i].taskStatus == 'COMPLETED') {
+                if ($scope.tasks[i].taskStatus === 'COMPLETED') {
                     $scope.selection.push($scope.tasks[i].taskId);
                 }
             }
@@ -37,7 +37,7 @@ app.controller('taskManagerController', function ($scope,$http) {
 
     //add a new task
     $scope.addTask = function addTask() {
-        if($scope.taskName=="" || $scope.taskDesc=="" || $scope.taskPriority == "" || $scope.taskStatus == ""){
+        if($scope.taskName === "" || $scope.taskDesc === "" || $scope.taskPriority === "" || $scope.taskStatus === ""){
             alert("Insufficient Data! Please provide values for task name, description, priortiy and status");
         }
         else{
@@ -89,7 +89,7 @@ app.controller('taskManagerController', function ($scope,$http) {
     // Archive Completed Tasks
     $scope.archiveTasks = function archiveTasks() {
         $scope.selection.forEach(function(taskUri) {
-            if (taskUri != undefined) {
+            if (taskUri !== undefined) {
                 $http.patch(taskUri, { taskArchived: 1});
             }
         });

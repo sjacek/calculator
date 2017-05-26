@@ -29,6 +29,10 @@ public class Calculator {
         }
     }
 
+    private static final String SQUARE = "square";
+    private static final String ROOT = "root";
+    private static final String EXP = "exp";
+
     private String expression;
 
     public Calculator(String expression) {
@@ -46,7 +50,7 @@ public class Calculator {
     }
 
     //Recursive function with the state machine
-    //states "(", "sin", "cos", "exp", "*", "/", "+", "-"
+    //states "(", "square", "root", "exp", "*", "/", "+", "-"
     private String recursiveCalculate(String expression) throws CalculatorException {
         int pos;
         log.trace("Solving expression: " + expression);
@@ -64,34 +68,40 @@ public class Calculator {
 
             return recursiveCalculate(expression);
 
-            //Three states for calculating sin cos exp
-            //input must be like sin0.7
-        } else if (-1 != (pos = expression.indexOf("sin"))) {
+        }
+        //Three states for calculating square root exp
+        //input must be like square5
+        else if (-1 != (pos = expression.indexOf(SQUARE))) {
 
-            pos += 2;//shift index to last symbol of "sin" instead of first
+            pos += 5;//shift index to last symbol of "square" instead of first
             String number = extractNumber(expression, pos, Direction.Right);
-            expression = expression.replace("sin" + number, Double.toString(Math.sin(Double.parseDouble(number))));
+            expression = expression.replace(SQUARE + number,
+                    Double.toString(Double.parseDouble(number) * Double.parseDouble(number)));
 
             return recursiveCalculate(expression);
 
-        } else if (-1 != (pos = expression.indexOf("cos"))) {
+        }
+        else if (-1 != (pos = expression.indexOf(ROOT))) {
+
+            pos += 3;
+            String number = extractNumber(expression, pos, Direction.Right);
+            expression = expression.replace(ROOT + number,
+                    Double.toString(Math.sqrt(Double.parseDouble(number))));
+
+            return recursiveCalculate(expression);
+
+        }
+        else if (-1 != (pos = expression.indexOf(EXP))) {
 
             pos += 2;
             String number = extractNumber(expression, pos, Direction.Right);
-            expression = expression.replace("cos" + number, Double.toString(Math.cos(Double.parseDouble(number))));
+            expression = expression.replace(EXP + number,
+                    Double.toString(Math.exp(Double.parseDouble(number))));
 
             return recursiveCalculate(expression);
 
-        } else if (-1 != (pos = expression.indexOf("exp"))) {
-
-            pos += 2;
-            String number = extractNumber(expression, pos, Direction.Right);
-            expression = expression.replace("exp" + number, Double.toString(Math.exp(Double.parseDouble(number))));
-
-            return recursiveCalculate(expression);
-
-
-        } else if (expression.indexOf("*") > 0 | expression.indexOf("/") > 0) {
+        }
+        else if (expression.indexOf("*") > 0 | expression.indexOf("/") > 0) {
 
             int multPos = expression.indexOf("*");
             int divPos = expression.indexOf("/");
@@ -108,7 +118,8 @@ public class Calculator {
 
             return recursiveCalculate(expression);
 
-        } else if (expression.indexOf("+") > 0 | expression.indexOf("-") > 0) {
+        }
+        else if (expression.indexOf("+") > 0 | expression.indexOf("-") > 0) {
 
             int summPos = expression.indexOf("+");
             int minusPos = expression.indexOf("-");

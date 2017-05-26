@@ -21,6 +21,16 @@ public class CalculatorTest {
     }
 
     @Test
+    public void evaluateSquare() throws CalculatorException {
+        assertEquals(9.0d, calculate("square 3"), 0.0d);
+    }
+
+    @Test
+    public void evaluateRoot() throws CalculatorException {
+        assertEquals(3.0d, calculate("root 9"), 0.0d);
+    }
+
+    @Test
     public void evaluateZeroOperators() throws CalculatorException {
         assertEquals(1.0d, calculate("1"), 0.0d);
     }

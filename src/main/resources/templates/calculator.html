@@ -64,15 +64,8 @@
             </div>
             <div class="panel-body" ng-show="show_previous">
                 <div class="calculation" ng-repeat="calculation in calculations">
-                    <!--script>
-                        //<![CDATA[
-                        var datetime = moment({{calculation.datetime}}, 'YYYY-MM-DD hh:mm');
-                        document.getElementsById('demo').innerHTML = datetime;
-                        //]]>
-                    </script-->
-                    <span class="calculation-row"><a ng-href="/calculations/{{hash}}">blabla</a></span>
                     <span class="calculation-row">{{calculation.expression}}</span>
-                    <span class="calculation-row">{{moment(calculation.datetime, 'YYYY-MM-DD hh:mm')}}</span>
+                    <span class="calculation-row">{{calculation.datetime}}</span>
                 </div>
             </div>
         </div>

@@ -2,17 +2,15 @@ package pl.sjacek.calculator.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pl.sjacek.calculator.Calculator;
 import pl.sjacek.calculator.CalculatorException;
 import pl.sjacek.calculator.controller.async.IntegralBean;
+import pl.sjacek.calculator.dto.CalculateDTO;
+import pl.sjacek.calculator.dto.CalculateIntegralDTO;
 import pl.sjacek.calculator.model.Calculation;
-import pl.sjacek.calculator.repositories.CalculationRepository;
+import pl.sjacek.calculator.service.CalculationService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +18,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -34,13 +30,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CalculatorController {
 
+//    @Autowired
+//    private CalculationRepository calculationRepository;
     @Autowired
-    private CalculationRepository calculationRepository;
+    private CalculationService calculationService;
+
+    @Autowired
+    private IntegralBean integralBean;
 
     private static final String CALCULATOR_HTML = "calculator.html";
 
+//    public CalculatorController(CalculationRepository calculationRepository, IntegralBean integralBean, Executor executor) {
+//        this.calculationRepository = calculationRepository;
+//        this.integralBean = integralBean;
+//        this.executor = executor;
+//    }
+
     @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-    public ModelMap calculate(@RequestBody CalculateParam param) throws CalculatorException {
+    public ModelMap calculate(@RequestBody CalculateDTO param) throws CalculatorException {
         log.debug("calculate({})", param.getExpression());
 
         ModelMap model = new ModelMap(CALCULATOR_HTML);
@@ -50,24 +57,14 @@ public class CalculatorController {
             return model;
         }
 
-        calculationRepository.save(Calculation.builder()
-                .expression(param.getExpression())
-                .datetime(new Date())
-                .build());
+        calculationService.save(param);
 
         model.addAttribute(Double.toString(Calculator.calculate(param.getExpression())));
         return model;
     }
 
-    @Autowired
-    private IntegralBean integralBean;
-
-    @Autowired
-    @Qualifier("taskExecutor")
-    Executor executor;
-
     @PostMapping(path = "/calculateIntegral", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-    public ModelMap calculateIntegral(@RequestBody CalculateIntegralParam param) throws CalculatorException {
+    public ModelMap calculateIntegral(@RequestBody CalculateIntegralDTO param) throws CalculatorException {
         log.debug("calculateIntegral: {}", param.toString());
 
 //        IntegralBean bean = context.getBean(IntegralBean.class);
@@ -79,8 +76,8 @@ public class CalculatorController {
         List<CompletableFuture<Double>> results = input.stream().map(d -> integralBean.runTask(d)).collect(Collectors.toList());
 
         log.debug("Tasks started");
-        ExecutorService es = (ExecutorService) ((ConcurrentTaskExecutor)executor).getConcurrentExecutor();
-        es.shutdown();
+//        ExecutorService es = (ExecutorService) ((ConcurrentTaskExecutor)executor).getConcurrentExecutor();
+//        es.shutdown();
 
         results.forEach(result -> {
             try {

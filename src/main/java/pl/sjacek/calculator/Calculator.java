@@ -3,8 +3,8 @@ package pl.sjacek.calculator;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.ParseException;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by Vladimir on 20.02.14.
@@ -57,52 +57,45 @@ public class Calculator {
         //Extracting expression from braces, doing recursive call
         //replace braced expression on result of it solving
         if (-1 != (pos = expression.indexOf("("))) {
-
             String subexp = extractExpressionFromBraces(expression, pos);
             expression = expression.replace("(" + subexp + ")", recursiveCalculate(subexp));
 
             int open = expression.indexOf("(");
             int close = expression.indexOf(")");
             if (open == -1 && close != -1)
-                throw new CalculatorException(new ParseException("Closing bracket without opening bracket", close));
+                throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(close));
 
             return recursiveCalculate(expression);
-
         }
         //Three states for calculating square root exp
         //input must be like square5
         else if (-1 != (pos = expression.indexOf(SQUARE))) {
-
             pos += 5;//shift index to last symbol of "square" instead of first
             String number = extractNumber(expression, pos, Direction.Right);
             expression = expression.replace(SQUARE + number,
                     Double.toString(Double.parseDouble(number) * Double.parseDouble(number)));
 
             return recursiveCalculate(expression);
-
         }
         else if (-1 != (pos = expression.indexOf(ROOT))) {
-
             pos += 3;
-            String number = extractNumber(expression, pos, Direction.Right);
-            expression = expression.replace(ROOT + number,
-                    Double.toString(Math.sqrt(Double.parseDouble(number))));
+            String sNumber = extractNumber(expression, pos, Direction.Right);
+            double number = Double.parseDouble(sNumber);
+            if (number < 0)
+                throw new CalculatorException("calculator.exception.root_of_negative", Double.toString(number));
+            expression = expression.replace(ROOT + sNumber, Double.toString(Math.sqrt(number)));
 
             return recursiveCalculate(expression);
-
         }
         else if (-1 != (pos = expression.indexOf(EXP))) {
-
             pos += 2;
             String number = extractNumber(expression, pos, Direction.Right);
             expression = expression.replace(EXP + number,
                     Double.toString(Math.exp(Double.parseDouble(number))));
 
             return recursiveCalculate(expression);
-
         }
         else if (expression.indexOf("*") > 0 | expression.indexOf("/") > 0) {
-
             int multPos = expression.indexOf("*");
             int divPos = expression.indexOf("/");
 
@@ -117,10 +110,8 @@ public class Calculator {
             expression = expression.replace(leftNum + divider + rightNum, calcShortExpr(leftNum, rightNum, divider));
 
             return recursiveCalculate(expression);
-
         }
         else if (expression.indexOf("+") > 0 | expression.indexOf("-") > 0) {
-
             int summPos = expression.indexOf("+");
             int minusPos = expression.indexOf("-");
 
@@ -136,7 +127,6 @@ public class Calculator {
             expression = expression.replace(leftNum + divider + rightNum, calcShortExpr(leftNum, rightNum, divider));
 
             return recursiveCalculate(expression);
-
         } else return expression;
     }
 
@@ -157,12 +147,11 @@ public class Calculator {
                     break;
                 default:
                     if (braceDepth > 0) subexp.append(expression.charAt(i));
-
             }
             if (braceDepth == 0 && !subexp.toString().equals(""))
                 return subexp.toString();
         }
-        throw new CalculatorException(new ParseException("Opening bracket without closing bracket", i));
+        throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(i));
     }
 
     private String extractNumber(String expression, int pos, Direction direction) {
@@ -194,19 +183,23 @@ public class Calculator {
             left = Double.parseDouble(sLeft);
         }
         catch (NumberFormatException ex) {
-            throw new CalculatorException(ex);
+            throw new CalculatorException("calculator.exception.bad_number_format", ex.getMessage());
         }
         try {
             right = Double.parseDouble(sRight);
         }
         catch (NumberFormatException ex) {
-            throw new CalculatorException(ex);
+            throw new CalculatorException("calculator.exception.bad_number_format", ex.getMessage());
         }
 
         double result;
         switch (divider) {
             case '*': result = left * right; break;
-            case '/': result = left / right; break;
+            case '/':
+                if (right == 0)
+                    throw new CalculatorException("calculator.exception.divide_by_zero");
+                result = left / right;
+                break;
             case '+': result = left + right; break;
             case '-': result = left - right; break;
             default:  result = 0.0d;
@@ -216,7 +209,7 @@ public class Calculator {
     }
 
     private String prepareExpression() {
-        return expression.replace(" ", "");
+        return expression.toLowerCase().replace(" ", "");
     }
 
 }

@@ -2,6 +2,7 @@ package pl.sjacek.calculator.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pl.sjacek.calculator.Calculator;
@@ -9,15 +10,14 @@ import pl.sjacek.calculator.CalculatorException;
 import pl.sjacek.calculator.controller.async.IntegralBean;
 import pl.sjacek.calculator.dto.CalculateDTO;
 import pl.sjacek.calculator.dto.CalculateIntegralDTO;
-import pl.sjacek.calculator.model.Calculation;
 import pl.sjacek.calculator.service.CalculationService;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,6 +37,11 @@ public class CalculatorController {
 
     @Autowired
     private IntegralBean integralBean;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    private Locale localePl = new Locale.Builder().setLanguage("en").setRegion("US").build();
 
     private static final String CALCULATOR_HTML = "calculator.html";
 
@@ -94,9 +99,15 @@ public class CalculatorController {
 
     @ExceptionHandler(CalculatorException.class)
     public ModelMap handleCustomException(CalculatorException ex) {
-        log.warn(ex.getMessage(), ex);
+        String message;
+        if (ex.getResourceMessage() != null && !ex.getResourceMessage().isEmpty())
+            message = messageSource.getMessage(ex.getResourceMessage(), ex.getArgs(), localePl);
+        else
+            message = ex.getCause().getMessage();
+
+        log.warn(message, ex);
         ModelMap model = new ModelMap(CALCULATOR_HTML);
-        model.addAttribute(ex.getMessage());
+        model.addAttribute(message);
         return model;
     }
 

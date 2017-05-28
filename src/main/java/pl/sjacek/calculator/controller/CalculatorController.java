@@ -47,31 +47,31 @@ public class CalculatorController {
 //    }
 
     @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-    public ModelMap calculate(@RequestBody CalculateDTO param) throws CalculatorException {
-        log.debug("calculate({})", param.getExpression());
+    public ModelMap calculate(@RequestBody CalculateDTO dto) throws CalculatorException {
+        log.debug("calculate({})", dto.getExpression());
 
         ModelMap model = new ModelMap(CALCULATOR_HTML);
 
-        if (param.getExpression() == null) {
+        if (dto.getExpression() == null) {
             model.addAttribute("");
             return model;
         }
 
-        calculationService.save(param);
+        calculationService.save(dto);
 
-        model.addAttribute(Double.toString(Calculator.calculate(param.getExpression())));
+        model.addAttribute(Double.toString(Calculator.calculate(dto.getExpression())));
         return model;
     }
 
     @PostMapping(path = "/calculateIntegral", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-    public ModelMap calculateIntegral(@RequestBody CalculateIntegralDTO param) throws CalculatorException {
-        log.debug("calculateIntegral: {}", param.toString());
+    public ModelMap calculateIntegral(@RequestBody CalculateIntegralDTO dto) throws CalculatorException {
+        log.debug("calculateIntegral: {}", dto.toString());
 
 //        IntegralBean bean = context.getBean(IntegralBean.class);
         log.debug("calling IntegralBean#runTask() thread: {}", Thread.currentThread().getName());
 
         List<Double> input = new ArrayList<>();
-        for (int i = 0; i < param.getThreads(); i++) input.add((double)i);
+        for (int i = 0; i < dto.getThreads(); i++) input.add((double)i);
 
         List<CompletableFuture<Double>> results = input.stream().map(d -> integralBean.runTask(d)).collect(Collectors.toList());
 

@@ -94,6 +94,15 @@ body
 	border: none;
 }
 
+.my-input {
+	transition:all linear 0.5s;
+	background: transparent;
+}
+.my-input.ng-invalid {
+	color:white;
+	background: red;
+}
+
 .panel .panel-body
 {
 	background: beige;

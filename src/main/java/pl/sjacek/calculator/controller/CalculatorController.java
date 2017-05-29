@@ -12,7 +12,6 @@ import pl.sjacek.calculator.dto.CalculateDTO;
 import pl.sjacek.calculator.dto.CalculateIntegralDTO;
 import pl.sjacek.calculator.service.CalculationService;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,8 +29,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CalculatorController {
 
-//    @Autowired
-//    private CalculationRepository calculationRepository;
     @Autowired
     private CalculationService calculationService;
 
@@ -44,12 +41,6 @@ public class CalculatorController {
     private Locale localePl = new Locale.Builder().setLanguage("en").setRegion("US").build();
 
     private static final String CALCULATOR_HTML = "calculator.html";
-
-//    public CalculatorController(CalculationRepository calculationRepository, IntegralBean integralBean, Executor executor) {
-//        this.calculationRepository = calculationRepository;
-//        this.integralBean = integralBean;
-//        this.executor = executor;
-//    }
 
     @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
     public ModelMap calculate(@RequestBody CalculateDTO dto) throws CalculatorException {
@@ -72,28 +63,37 @@ public class CalculatorController {
     public ModelMap calculateIntegral(@RequestBody CalculateIntegralDTO dto) throws CalculatorException {
         log.debug("calculateIntegral: {}", dto.toString());
 
-//        IntegralBean bean = context.getBean(IntegralBean.class);
         log.debug("calling IntegralBean#runTask() thread: {}", Thread.currentThread().getName());
 
-        List<Double> input = new ArrayList<>();
-        for (int i = 0; i < dto.getThreads(); i++) input.add((double)i);
+        double dx = (dto.getIntervalEnd() - dto.getIntervalBegin()) / (double)dto.getThreads();
 
-        List<CompletableFuture<Double>> results = input.stream().map(d -> integralBean.runTask(d)).collect(Collectors.toList());
+        List<Double> input = new ArrayList<>();
+        for (int i = 1; i <= dto.getThreads(); i++)
+            input.add(dto.getIntervalBegin() + i * dx);
+
+        List<CompletableFuture<Double>> results = input.stream().map(d -> integralBean.runTask(dto.getRepetitions(), d)).collect(Collectors.toList());
 
         log.debug("Tasks started");
-//        ExecutorService es = (ExecutorService) ((ConcurrentTaskExecutor)executor).getConcurrentExecutor();
-//        es.shutdown();
 
+        final double[] ret = new double[1];
+        ret[0] = 0;
+        final String[] errorMessage = new String[1];
         results.forEach(result -> {
             try {
                 log.debug("Result:{}", result.get());
+                ret[0] += result.get();
             } catch (InterruptedException | ExecutionException ex) {
                 log.error(ex.getMessage());
+                errorMessage[0] = ex.getMessage();
             }
         });
+        ret[0] *= dx;
 
         ModelMap model = new ModelMap(CALCULATOR_HTML);
-        model.addAttribute("");
+        if (errorMessage[0] != null && !errorMessage[0].isEmpty())
+            model.addAttribute(errorMessage[0]);
+        else
+            model.addAttribute(Double.toString(ret[0]));
         return model;
     }
 

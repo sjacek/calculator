@@ -44,7 +44,8 @@ app.controller('calculationController', function ($scope, $http) {
         }
 
         $http.post(urlBase + '/v1/calculator/calculateIntegral', {
-            interval: $scope.interval,
+            intervalBegin: $scope.intervalBegin,
+            intervalEnd: $scope.intervalEnd,
             threads: $scope.threads,
             repetitions: $scope.repetitions
         }).success(function (data, status, headers) {

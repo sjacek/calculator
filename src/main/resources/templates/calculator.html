@@ -22,7 +22,7 @@
             <i class="panel-title-icon fa fa-calculator"></i>
             <span class="panel-title">Calculator</span>
             <div class="panel-heading-controls">
-                <button ng-click="show_integral = !show_integral" class="btn-panel">Całka e^x</button>
+                <button ng-click="show_integral = !show_integral" class="btn-panel">e^x integral</button>
                 <button ng-click="show_previous = !show_previous" class="btn-panel">Show previous calculations</button>
             </div>
         </div>
@@ -32,6 +32,7 @@
                     <div class="form-group">
                         <label>Expression:
                             <input type="text" ng-model="expression" class="my-input" required="true" />
+                            <!--ng-pattern='/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/'-->
                         </label>
                     </div>
                     <div class="form-group">
@@ -46,8 +47,13 @@
             <div class="panel-body" ng-show="show_integral">
                 <form name="calculateIntegralForm">
                     <div class="form-group">
-                        <label>Interval:
-                            <input id="interval" type="text" ng-model="interval" ng-pattern="/^\d+$/" class="my-input" required="true" />
+                        <label>Begin of interval:
+                            <input type="text" ng-model="intervalBegin" ng-pattern="/^\d+$/" class="my-input" required="true" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>End of interval:
+                            <input type="text" ng-model="intervalEnd" ng-pattern="/^\d+$/" class="my-input" required="true" />
                         </label>
                     </div>
                     <div class="form-group">
@@ -62,7 +68,7 @@
                     </div>
                     <div class="form-group">
                         <label>Result:</label>
-                        <label>{{ result }}</label>
+                        <label>{{ integralResult }}</label>
                     </div>
                     <div class="form-group">
                         <button type="submit" ng-click="calculateIntegral()" class="btn-panel-big">Calculate</button>

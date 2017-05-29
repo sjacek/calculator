@@ -11,13 +11,16 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class IntegralBean {
     @Async
-    public CompletableFuture<Double> runTask (double d) {
-        log.info("Running task  thread: {}", Thread.currentThread().getName());
+    public CompletableFuture<Double> runTask (int n, double d) {
+        log.info("Running task thread: {}", Thread.currentThread().getName());
 
         return new CompletableFuture<Double>() {
             @Override
             public Double get() {
-                return d + 10;
+                double sum = 1d;
+                for (int i = n - 1; i > 0; --i)
+                    sum = 1 + d * sum / i;
+                return sum;
             }
         };
     }

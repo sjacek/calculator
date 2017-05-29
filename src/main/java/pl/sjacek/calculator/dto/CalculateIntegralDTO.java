@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data public class CalculateIntegralDTO {
 
-    private Integer interval;
+    private Integer intervalBegin;
+
+    private Integer intervalEnd;
 
     private Integer threads;
 

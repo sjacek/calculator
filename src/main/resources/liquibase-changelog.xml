@@ -15,16 +15,4 @@
         <addNotNullConstraint tableName="CALCULATION" columnName="EXPRESSION" columnDataType="VARCHAR(255)"/>
         <addNotNullConstraint tableName="CALCULATION" columnName="DATETIME" columnDataType="DATETIME"/>
     </changeSet>
-    <changeSet author="jacek (generated)" id="1495659938899-2">
-        <createTable tableName="TASK">
-            <column autoIncrement="true" name="TASK_ID" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_2"/>
-            </column>
-            <column name="TASK_ARCHIVED" type="INT(10)"/>
-            <column name="TASK_DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="TASK_NAME" type="VARCHAR(255)"/>
-            <column name="TASK_PRIORITY" type="VARCHAR(255)"/>
-            <column name="TASK_STATUS" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
 </databaseChangeLog>

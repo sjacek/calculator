@@ -115,27 +115,16 @@ body
 	content: " ";
 	display: table;
 }
-.panel .pabel-body .task .calculation
+.panel .pabel-body .calculation
 {
 	padding-left: 20px;
 	padding-right: 20px;
 	margin: 0 -20px;
 }
-.task:before
-{
-	content: " ";
-	display: table;
-}
 .calculation:before
 {
 	content: " ";
 	display: table;
-}
-.add-task
-{
-	width: 80%;
-	margin-left: 10%;
-	margin-right: 10%;
 }
 .priority
 {
@@ -169,38 +158,6 @@ body
 	background: green;
 }
 
-.task .action-checkbox
-{
-	float: left;
-	width: 20px;
-	display: block;
-	line-height: 21px;
-}
-.task .action-checkbox .single
-{
-	display: inline-block;
-	margin: 0;
-	position: relative;
-	vertical-align: middle;
-	top: -1px;
-	width: 15px;
-	height: 15px;
-	font-weight: 400!important;
-}
-.task
-{
-	padding: 8px 0;
-	position: relative;
-	background: beige;
-	margin: 0 -20px;
-	padding-left: 20px;
-	padding-right: 20px;
-}
-.task+.task
-{
-	border-top: 1px solid;
-	border-top-color: #e4e4e4;
-}
 .checkedClass
 {
 	color: #999 !important;
@@ -210,29 +167,6 @@ body
 {
 	color: darkslategray !important;
 	text-decoration: none !important;
-}
-.task-title
-{
-	color: #444;
-	text-decoration: none;
-	float: none;
-	overflow: hidden;
-	display: block;
-	line-height: 21px;
-}
-.task-title span
-{
-	display: inline-block;
-	color: #aaa;
-	margin-left: 5px;
-	font-size: 12px;
-	font-style: italic;
-}
-.task:after
-{
-	clear:both;
-	content: " ";
-	display: table;
 }
 .action-status
 {

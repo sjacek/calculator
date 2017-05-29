@@ -3,7 +3,7 @@ package pl.sjacek.calculator;
 import lombok.Getter;
 
 /**
- * Created by jacek.sztajnke on 2017-05-24.
+ * Exception used by calculator
  */
 @Getter
 public class CalculatorException extends Exception {

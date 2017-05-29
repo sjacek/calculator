@@ -9,7 +9,7 @@ import pl.sjacek.calculator.repositories.CalculationRepository;
 import java.util.Date;
 
 /**
- * Created by jacek on 28.05.17.
+ * Service class for calculations
  */
 @Service
 public class CalculationService {
@@ -17,6 +17,11 @@ public class CalculationService {
     @Autowired
     private CalculationRepository calculationRepository;
 
+    /**
+     * Saves the calculation in the database
+     * @param param the calculation data
+     * @return the calculation entity with correct id
+     */
     public Calculation save(CalculateDTO param) {
         return calculationRepository.save(Calculation.builder()
                 .expression(param.getExpression())

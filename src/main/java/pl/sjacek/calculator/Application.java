@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
+/**
+ * The main application class
+ */
 @Configuration
 @ComponentScan
 @EnableJpaRepositories

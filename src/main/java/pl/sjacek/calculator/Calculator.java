@@ -4,10 +4,9 @@ import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
- * Created by Vladimir on 20.02.14.
+ * Calculator class
  */
 @Slf4j
 public class Calculator {
@@ -35,6 +34,10 @@ public class Calculator {
 
     private String expression;
 
+    /**
+     * Class constructor
+     * @param expression expression to resolve
+     */
     public Calculator(String expression) {
         this.expression = expression;
     }
@@ -45,12 +48,22 @@ public class Calculator {
         return Double.parseDouble(recursiveCalculate(expression));
     }
 
+    /**
+     * Static method for invoking calculations
+     * @param expression expression to resolve
+     * @return result of the calculation
+     * @throws CalculatorException
+     */
     public static double calculate(String expression) throws CalculatorException {
         return new Calculator(expression).calculate();
     }
 
-    //Recursive function with the state machine
-    //states "(", "square", "root", "exp", "*", "/", "+", "-"
+    /**
+     * Recursive function with the state machine states "(", "square", "root", "exp", "*", "/", "+", "-"
+     * @param expression expression to resolve
+     * @return result of the calculation
+     * @throws CalculatorException
+     */
     private String recursiveCalculate(String expression) throws CalculatorException {
         int pos;
         log.trace("Solving expression: " + expression);
@@ -130,6 +143,13 @@ public class Calculator {
         } else return expression;
     }
 
+    /**
+     * Function extracting expression from brackets
+     * @param expression expression to resolve
+     * @param pos position, where to analize expression
+     * @return expression from brackets
+     * @throws CalculatorException
+     */
     private String extractExpressionFromBraces(String expression, int pos) throws CalculatorException {
         int braceDepth = 1;
         StringBuilder subexp = new StringBuilder();
@@ -154,6 +174,13 @@ public class Calculator {
         throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(i));
     }
 
+    /**
+     * Get number from the given position
+     * @param expression the expression
+     * @param pos the given position
+     * @param direction direction - right or left
+     * @return
+     */
     private String extractNumber(String expression, int pos, Direction direction) {
 
         StringBuilder resultNumber = new StringBuilder();
@@ -176,6 +203,14 @@ public class Calculator {
         return resultNumber.toString();
     }
 
+    /**
+     * Calculates simple mathematical operation
+     * @param sLeft   left number
+     * @param sRight  right number
+     * @param divider mathematical operator
+     * @return result of the operation
+     * @throws CalculatorException
+     */
     private String calcShortExpr(String sLeft, String sRight, char divider) throws CalculatorException {
 
         double left, right;

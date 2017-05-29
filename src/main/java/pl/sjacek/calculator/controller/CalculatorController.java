@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
- * Created by jacek.sztajnke on 2017-05-23.
+ * Controller class of the calculator
  */
 @RestController
 @RequestMapping("/v1/calculator")
@@ -42,6 +42,12 @@ public class CalculatorController {
 
     private static final String CALCULATOR_HTML = "calculator.html";
 
+    /**
+     * The regular calculator
+     * @param dto params
+     * @return result of the calculations
+     * @throws CalculatorException
+     */
     @PostMapping(path = "/calculate", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
     public ModelMap calculate(@RequestBody CalculateDTO dto) throws CalculatorException {
         log.debug("calculate({})", dto.getExpression());
@@ -59,6 +65,12 @@ public class CalculatorController {
         return model;
     }
 
+    /**
+     * Calculates e^x integral
+     * @param dto params for the caluclation
+     * @return result of the calculation
+     * @throws CalculatorException
+     */
     @PostMapping(path = "/calculateIntegral", consumes = APPLICATION_JSON_VALUE, headers = "Accept=application/json")
     public ModelMap calculateIntegral(@RequestBody CalculateIntegralDTO dto) throws CalculatorException {
         log.debug("calculateIntegral: {}", dto.toString());
@@ -97,6 +109,11 @@ public class CalculatorController {
         return model;
     }
 
+    /**
+     * Exception handler in case of CalculatorException
+     * @param ex the exception to process
+     * @return message to display
+     */
     @ExceptionHandler(CalculatorException.class)
     public ModelMap handleCustomException(CalculatorException ex) {
         String message;
@@ -111,6 +128,11 @@ public class CalculatorController {
         return model;
     }
 
+    /**
+     * Exception handler in case of any other exception
+     * @param ex the exception to process
+     * @return message to display
+     */
     @ExceptionHandler(Exception.class)
     public ModelMap handleAllException(Exception ex) {
         log.warn(ex.getMessage(), ex);

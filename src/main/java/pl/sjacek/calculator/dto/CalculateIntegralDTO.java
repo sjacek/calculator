@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Created by jacek on 25.05.17.
+ * DTO class for e^x integral calculations
  */
 @Builder
 @NoArgsConstructor

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * Created by jacek on 21.05.17.
+ * Calculations entity
  */
 @Entity
 @NoArgsConstructor
@@ -20,13 +20,22 @@ import java.util.Date;
 @EqualsAndHashCode(exclude = { "id" })
 @Data public class Calculation {
 
+    /**
+     * Identifier
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The expression
+     */
     @NotBlank
     private String expression;
 
+    /**
+     * Date and time of the calculation
+     */
     @NotNull
     private Date datetime;
 }

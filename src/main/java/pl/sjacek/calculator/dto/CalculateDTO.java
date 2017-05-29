@@ -6,11 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Created by jacek.sztajnke on 2017-05-23.
+ * DTO class for calculations
  */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data public class CalculateDTO {
+
+    /**
+     * The expression
+     */
     private String expression;
 }

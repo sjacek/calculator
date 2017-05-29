@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.containsAny;
+
 /**
  * Calculator class
  */
@@ -69,12 +71,37 @@ public class Calculator {
         log.trace("Solving expression: " + expression);
         //Extracting expression from braces, doing recursive call
         //replace braced expression on result of it solving
-        if (-1 != (pos = expression.indexOf("("))) {
-            String subexp = extractExpressionFromBraces(expression, pos);
-            expression = expression.replace("(" + subexp + ")", recursiveCalculate(subexp));
+        if (containsAny(expression, "{[(")) {
+            char bracket1 = 0;
+            char bracket2 = 0;
+            pos = expression.indexOf("{");
+            if (pos != -1) {
+                bracket1 = '{';
+                bracket2 = '}';
+            }
+            else {
+                pos = expression.indexOf("[");
+                if (pos != -1) {
+                    bracket1 = '[';
+                    bracket2 = ']';
+                }
+                else {
+                    pos = expression.indexOf("(");
+                    if (pos != -1) {
+                        bracket1 = '(';
+                        bracket2 = ')';
+                    }
+                    else
+                        // this should never riched
+                        assert false;
+                }
+            }
 
-            int open = expression.indexOf("(");
-            int close = expression.indexOf(")");
+            String subexp = extractExpressionFromBraces(expression, pos, bracket1, bracket2);
+            expression = expression.replace(bracket1 + subexp + bracket2, recursiveCalculate(subexp));
+
+            int open = expression.indexOf(bracket1);
+            int close = expression.indexOf(bracket2);
             if (open == -1 && close != -1)
                 throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(close));
 
@@ -108,7 +135,7 @@ public class Calculator {
 
             return recursiveCalculate(expression);
         }
-        else if (expression.indexOf("*") > 0 | expression.indexOf("/") > 0) {
+        else if (containsAny(expression, "*/")) {
             int multPos = expression.indexOf("*");
             int divPos = expression.indexOf("/");
 
@@ -124,7 +151,7 @@ public class Calculator {
 
             return recursiveCalculate(expression);
         }
-        else if (expression.indexOf("+") > 0 | expression.indexOf("-") > 0) {
+        else if (containsAny(expression, "+-")) {
             int summPos = expression.indexOf("+");
             int minusPos = expression.indexOf("-");
 
@@ -147,27 +174,28 @@ public class Calculator {
      * Function extracting expression from brackets
      * @param expression expression to resolve
      * @param pos position, where to analize expression
+     * @param bracket1 opening bracket
+     * @param bracket2 closing bracket
      * @return expression from brackets
      * @throws CalculatorException
      */
-    private String extractExpressionFromBraces(String expression, int pos) throws CalculatorException {
+    private String extractExpressionFromBraces(String expression, int pos, char bracket1, char bracket2) throws CalculatorException {
         int braceDepth = 1;
         StringBuilder subexp = new StringBuilder();
 
         int i;
         for (i = pos + 1; i < expression.length(); i++) {
-            switch (expression.charAt(i)) {
-                case '(':
-                    braceDepth++;
-                    subexp.append("(");
-                    break;
-                case ')':
-                    braceDepth--;
-                    if (braceDepth != 0) subexp.append(")");
-                    break;
-                default:
-                    if (braceDepth > 0) subexp.append(expression.charAt(i));
+            if (expression.charAt(i) == bracket1) {
+                braceDepth++;
+                subexp.append(bracket1);
             }
+            else if (expression.charAt(i) == bracket2) {
+                braceDepth--;
+                if (braceDepth != 0) subexp.append(bracket2);
+            }
+            else if (braceDepth > 0)
+                subexp.append(expression.charAt(i));
+
             if (braceDepth == 0 && !subexp.toString().equals(""))
                 return subexp.toString();
         }

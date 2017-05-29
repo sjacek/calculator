@@ -41,22 +41,27 @@ public class CalculatorTest {
     }
 
     @Test
-    public void evaluateOneOperatorWithParens() throws CalculatorException {
+    public void evaluateOneOperatorWithBraces() throws CalculatorException {
         assertEquals(2.0d, calculate("(1+1)"), 0.0d);
     }
 
     @Test
-    public void evaluateTwoOperatorWithParens() throws CalculatorException {
-        assertEquals(1.0d, calculate("((1-0)+(1-1))"), 0.0d);
+    public void evaluateTwoOperatorWithBraces() throws CalculatorException {
+        assertEquals(1.0d, calculate("[(1-0)+(1-1)]"), 0.0d);
+    }
+
+    @Test(expected=CalculatorException.class)
+    public void evaluateTwoOperatorWithWrongBraces() throws CalculatorException {
+        assertEquals(1.0d, calculate("[(1-0)+(1-1)}"), 0.0d);
     }
 
     @Test
-    public void evaluateThreeOperatorWithInnerParens() throws CalculatorException {
+    public void evaluateThreeOperatorWithInnerBraces() throws CalculatorException {
         assertEquals(2.0d, calculate("(1-1)+(1+1)"), 0.0d);
     }
 
     @Test
-    public void evaluateThreeOperatorWithNoParens() throws CalculatorException {
+    public void evaluateThreeOperatorWithNoBraces() throws CalculatorException {
         assertEquals(4.0d, calculate("5-2+1"), 0.0d);
     }
 

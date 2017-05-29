@@ -60,39 +60,23 @@ public class CalculatorTest {
         assertEquals(4.0d, calculate("5-2+1"), 0.0d);
     }
 
-    @Test(expected=ParseException.class)
-    public void evaluateMissingParens() throws Throwable {
-        try {
-            calculate("((1+1)");
-        } catch (CalculatorException ex) {
-            throw ex.getCause();
-        }
+    @Test(expected=CalculatorException.class)
+    public void evaluateMissingParens() throws CalculatorException {
+        calculate("((1+1)");
     }
 
-    @Test(expected=ParseException.class)
-    public void evaluateMissingParens2() throws Throwable {
-        try {
-            calculate("(1+1))");
-        } catch (CalculatorException ex) {
-            throw ex.getCause();
-        }
+    @Test(expected=CalculatorException.class)
+    public void evaluateMissingParens2() throws CalculatorException {
+        calculate("(1+1))");
     }
 
-    @Test(expected=NumberFormatException.class)
-    public void evaluateBadNumberFormat() throws Throwable {
-        try {
-            calculate("a+1");
-        } catch (CalculatorException ex) {
-            throw ex.getCause();
-        }
+    @Test(expected=CalculatorException.class)
+    public void evaluateBadNumberFormat() throws CalculatorException {
+        calculate("a+1");
     }
 
-    @Test(expected=NumberFormatException.class)
-    public void evaluateBadNumberFormat2() throws Throwable {
-        try {
-            calculate("2,0+1");
-        } catch (CalculatorException ex) {
-            throw ex.getCause();
-        }
+    @Test(expected=CalculatorException.class)
+    public void evaluateBadNumberFormat2() throws CalculatorException {
+        calculate("2,0+1");
     }
 }

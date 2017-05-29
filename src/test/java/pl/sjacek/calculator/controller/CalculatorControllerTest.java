@@ -33,7 +33,6 @@ public class CalculatorControllerTest {
 
     @Before
     public void setUp() {
-//        final Start builder = RepositoryFactoryBuilder.builder();
         calculatorController = new CalculatorController();
 
         calculationServiceMock = mock(CalculationService.class);
@@ -45,32 +44,9 @@ public class CalculatorControllerTest {
 
     @Test
     public void calculate() throws Exception {
-//        BindingAwareModelMap model = new BindingAwareModelMap();
-
         CalculateDTO calculateDTO = CalculateDTO.builder()
                 .expression("5+3-2")
                 .build();
         assertEquals("6.0", calculatorController.calculate(calculateDTO).get("string"));
     }
-
-//    @Test
-//    public void calculateIntegral() throws Exception {
-//        CalculateIntegralDTO calculateIntegralDTO = CalculateIntegralDTO.builder()
-//                .interval(10)
-//                .repetitions(20)
-//                .threads(30)
-//                .build();
-//        assertEquals("", calculatorController.calculateIntegral(calculateIntegralDTO).get("string"));
-//    }
-
-//    @Configuration
-//    static class Config {
-//
-//        @Bean
-//        public static PropertySourcesPlaceholderConfigurer propertiesResolver() {
-//            return new PropertySourcesPlaceholderConfigurer();
-//        }
-//
-//    }
-
 }

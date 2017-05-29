@@ -1,0 +1,3 @@
+calculator:
+  threads:
+    pool-size: 10

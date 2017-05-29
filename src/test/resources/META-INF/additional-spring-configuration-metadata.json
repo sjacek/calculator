@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "server.tomcat.access-log-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Description for server.tomcat.access-log-enabled."
+    },
+    {
+      "name": "server.tomcat.access-log-pattern",
+      "type": "java.lang.String",
+      "description": "Description for server.tomcat.access-log-pattern."
+    },
+    {
+      "name": "server.tomcat.rotate",
+      "type": "java.lang.Boolean",
+      "description": "Description for server.tomcat.rotate."
+    },
+    {
+      "name": "calculator.threads.pool-size",
+      "type": "java.lang.Integer",
+      "description": "Description for calculator.threads.pool-size."
+    }
+  ]
+}

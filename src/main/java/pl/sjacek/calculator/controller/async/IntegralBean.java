@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class IntegralBean {
     @Async
     public CompletableFuture<Double> runTask (int n, double d) {
-        log.info("Running task thread: {}", Thread.currentThread().getName());
+        log.debug("Running task thread: {}", Thread.currentThread().getName());
 
         return new CompletableFuture<Double>() {
             @Override

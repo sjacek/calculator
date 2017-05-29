@@ -199,7 +199,7 @@ public class Calculator {
             if (braceDepth == 0 && !subexp.toString().equals(""))
                 return subexp.toString();
         }
-        throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(i));
+        throw new CalculatorException("calculator.exception.bad_brackets", Integer.toString(pos));
     }
 
     /**
